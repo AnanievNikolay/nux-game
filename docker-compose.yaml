@@ -1,0 +1,15 @@
+services:
+  nux-game:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nux-game
+    ports:
+      - "8080:8080"
+    restart: always
+    environment:
+      - APP_CONFIG=./config.json
+    volumes:
+      - ~/app/nux-game/logs:/app/logs
+      - ~/app/nux-game/sqlite-db:/app/sqlite-db
+      - ~/app/nux-game/config.json:/app/config.json

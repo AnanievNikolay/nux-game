@@ -1,0 +1,23 @@
+{
+    "logger": {
+        "filename": "./logs/app.log",
+        "maxsize": 10,
+        "maxage": 180,
+        "maxbackups": 100,
+        "compress": true,
+        "localtime": true
+    },
+    "delivery": {
+        "http": {
+            "host": "0.0.0.0",
+            "port": 8080
+        }
+    },
+    "db": {
+        "sqlite": {
+            "migrate_path": "./migration",
+            "file_name": "./_nux_game.db",
+            "file_folder": "./sqlite-db"
+        }
+    }
+}

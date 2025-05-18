@@ -1,0 +1,8 @@
+*.db
+.vscode
+config-*
+.idea
+*.log
+.DS_Store
+logs
+sqlite-db
