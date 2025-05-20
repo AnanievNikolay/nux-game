@@ -33,9 +33,15 @@ Before running the project, make sure to review and adjust the configuration in 
     },
     "db": {
         "sqlite": {
-            "migrate_path": "./migration",
+            "migrate_path": "./migration/sqlite",
             "file_name": "./_nux_game.db",
-            "file_folder": "./sqlite-db"
+            "file_folder": "./sqlite-db",
+            "ttl": 600
+        }
+    },
+    "service": {
+        "token": {
+            "ttl": 604800
         }
     }
 }
