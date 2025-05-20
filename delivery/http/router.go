@@ -4,8 +4,9 @@ import (
 	nethttp "net/http"
 
 	"github.com/labstack/echo/v4/middleware"
-
 	echoSwagger "github.com/swaggo/echo-swagger"
+
+	_ "github.com/AnanievNikolay/nux-game/docs"
 )
 
 // imported dto for openAPI Docs
@@ -26,4 +27,6 @@ func (d *Delivery) initRouter() {
 	d.e.GET("/is_alive", d.check)
 
 	d.e.GET("/docs/*", echoSwagger.WrapHandler)
+
+	d.e.POST("/user/register", d.userHandler.CreateUser)
 }

@@ -3,13 +3,23 @@ package provider
 import (
 	"context"
 
-	log "github.com/sirupsen/logrus"
 	"go.uber.org/dig"
 
 	"github.com/AnanievNikolay/nux-game/common/config"
 	"github.com/AnanievNikolay/nux-game/common/db"
 	"github.com/AnanievNikolay/nux-game/common/lifecycle"
 	"github.com/AnanievNikolay/nux-game/delivery/http"
+	"github.com/sirupsen/logrus"
+
+	userHandler "github.com/AnanievNikolay/nux-game/delivery/http/handler/user"
+
+	tokenService "github.com/AnanievNikolay/nux-game/service/token"
+	userService "github.com/AnanievNikolay/nux-game/service/user"
+
+	tokenRepository "github.com/AnanievNikolay/nux-game/repository/token/sqlite"
+	userRepository "github.com/AnanievNikolay/nux-game/repository/user/sqlite"
+
+	userUnitOfWork "github.com/AnanievNikolay/nux-game/uow/user/sqlite"
 )
 
 type Provider struct {
@@ -17,7 +27,7 @@ type Provider struct {
 
 	ctx    context.Context
 	cfg    *config.Config
-	logger *log.Entry
+	logger *logrus.Entry
 
 	lifecycleHub *lifecycle.Hub
 
@@ -27,7 +37,7 @@ type Provider struct {
 func NewProvider(
 	ctx context.Context,
 	cfg *config.Config,
-	logger *log.Entry,
+	logger *logrus.Entry,
 ) *Provider {
 	return &Provider{
 		container: dig.New(),
@@ -49,13 +59,13 @@ func (p *Provider) Provide() (*dig.Container, error) {
 		return p.ctx
 	})
 
-	p.provide(func() *log.Entry {
+	p.provide(func() *logrus.Entry {
 		return p.logger
 	})
 
 	// sqLite
 	p.provide(func(
-		logger *log.Entry,
+		logger *logrus.Entry,
 		cfg *config.Config,
 	) (*db.Connector, error) {
 		return db.NewSQLiteConnector(
@@ -63,10 +73,41 @@ func (p *Provider) Provide() (*dig.Container, error) {
 			cfg,
 		)
 	}, dig.As(
+		new(userRepository.Connector),
+		new(tokenRepository.Connector),
+		new(userUnitOfWork.Connector),
+
 		new(db.SQLiteDB),
 	))
 
+	// services
+	p.provide(userService.NewService, dig.As(
+		new(userHandler.Service),
+	))
+
+	p.provide(tokenService.NewService, dig.As(
+		new(userService.TokenService),
+	))
+
+	// unit of works
+	p.provide(userUnitOfWork.NewUnitOwWork, dig.As(
+		new(userService.UnitOfWork),
+	))
+
+	// repositories
+	p.provide(userRepository.NewRepository, dig.As(
+		new(userUnitOfWork.UserRepository),
+		new(userService.Repository),
+	))
+
+	p.provide(tokenRepository.NewRepository, dig.As(
+		new(userUnitOfWork.TokenRepositopry),
+	))
+
 	p.provide(http.NewDelivery)
+
+	// handlers
+	p.provide(userHandler.NewHandler)
 
 	p.hooks()
 

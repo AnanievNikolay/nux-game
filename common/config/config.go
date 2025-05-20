@@ -8,6 +8,7 @@ type Config struct {
 	Logger   *lumberjack.Logger `json:"logger"`
 	Delivery *Delivery          `json:"delivery"`
 	DB       *DB                `json:"db"`
+	Service  *Service           `json:"service"`
 }
 
 type Delivery struct {
@@ -27,4 +28,13 @@ type SQLite struct {
 	MigratePath string `json:"migrate_path"`
 	FileName    string `json:"file_name"`
 	FileFolder  string `json:"file_folder"`
+	TTL         int    `json:"ttl"`
+}
+
+type Service struct {
+	Token TokenService `json:"token"`
+}
+
+type TokenService struct {
+	TTL int `json:"ttl"`
 }

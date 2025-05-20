@@ -3,7 +3,7 @@ package lifecycle
 import (
 	"context"
 
-	log "github.com/sirupsen/logrus"
+	"github.com/sirupsen/logrus"
 )
 
 type Service interface {
@@ -11,12 +11,12 @@ type Service interface {
 }
 
 type Hub struct {
-	logger      *log.Entry
+	logger      *logrus.Entry
 	onStopStack []Service
 }
 
 func NewHub(
-	logger *log.Entry,
+	logger *logrus.Entry,
 ) *Hub {
 	return &Hub{
 		onStopStack: []Service{},

@@ -1,0 +1,63 @@
+definitions:
+  domain.User:
+    properties:
+      id:
+        type: string
+      phone:
+        type: string
+      username:
+        type: string
+    type: object
+  dto.UserCreateRequest:
+    properties:
+      phone:
+        type: string
+      username:
+        maxLength: 32
+        minLength: 3
+        type: string
+    required:
+    - phone
+    - username
+    type: object
+info:
+  contact: {}
+paths:
+  /user/register:
+    post:
+      description: create user by username and phone
+      parameters:
+      - description: UserCreateRequest
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UserCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.User'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: create user
+      tags:
+      - user
+securityDefinitions:
+  ApiKeyAuth:
+    in: query
+    name: token
+    type: apiKey
+swagger: "2.0"

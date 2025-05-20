@@ -1,24 +1,25 @@
 -- +goose Up
 CREATE TABLE users (
-    id CHAR(36) NOT NULL DEFAULT '' PRIMARY KEY,
+    id CHAR(32) NOT NULL DEFAULT '' PRIMARY KEY,
     username VARCHAR(255) NOT NULL DEFAULT '',
-    token VARCHAR(36) NOT NULL DEFAULT '',
-    issued_at INTEGER NOT NULL DEFAULT 0,
-    phone VARCHAR(255) NOT NULL DEFAULT '',
+    phone VARCHAR(32) NOT NULL DEFAULT '',
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+    UNIQUE(`username`,`phone`)
 );
 
--- Тригер для оновлення `updated_at` при зміні запису
-CREATE TRIGGER trg_users_updated_at
-AFTER UPDATE ON users
-FOR EACH ROW
-BEGIN
-    UPDATE users
-    SET updated_at = CURRENT_TIMESTAMP
-    WHERE id = OLD.id;
-END;
+CREATE TABLE user_token(
+    user_id CHAR(32) NOT NULL DEFAULT '',
+    token CHAR(36) NOT NULL DEFAULT '',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    expires_at DATETIME NOT NULL,
+    PRIMARY KEY (user_id, token)
+);
+
+CREATE INDEX idx_token ON user_token(token);
 
 -- +goose Down
-DROP TRIGGER IF EXISTS trg_users_updated_at;
-DROP TABLE IF EXISTS users;
+DROP TRIGGER trg_users_updated_at;
+
+DROP TABLE users;
+
+DROP TABLE user_token;

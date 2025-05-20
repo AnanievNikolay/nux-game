@@ -8,7 +8,7 @@ import (
 	"github.com/jmoiron/sqlx"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/pressly/goose"
-	log "github.com/sirupsen/logrus"
+	"github.com/sirupsen/logrus"
 
 	"github.com/AnanievNikolay/nux-game/common/config"
 	"github.com/AnanievNikolay/nux-game/common/lifecycle"
@@ -23,11 +23,11 @@ type SQLiteDB interface {
 }
 
 func NewSQLiteConnector(
-	logger *log.Entry,
+	logger *logrus.Entry,
 	cfg *config.Config,
 ) (*Connector, error) {
 	c := &Connector{
-		logger: logger.WithFields(log.Fields{
+		logger: logger.WithFields(logrus.Fields{
 			"layer":     "connector",
 			"connector": dialect,
 		}),
@@ -48,7 +48,7 @@ func NewSQLiteConnector(
 
 func GetDBInstance(config *config.SQLite) (sqlxDB *sqlx.DB, err error) {
 	if err := os.MkdirAll(config.FileFolder, os.ModePerm); err != nil {
-		log.Fatalf("Failed to create directory: %v", err)
+		logrus.Fatalf("Failed to create directory: %v", err)
 	}
 
 	sqlxDB, err = sqlx.Open(dialect, config.FileFolder+"/"+config.FileName)

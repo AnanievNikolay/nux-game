@@ -2,11 +2,11 @@ package db
 
 import (
 	"github.com/jmoiron/sqlx"
-	log "github.com/sirupsen/logrus"
+	"github.com/sirupsen/logrus"
 )
 
 type Connector struct {
-	logger *log.Entry
+	logger *logrus.Entry
 	dbType string
 	db     *sqlx.DB
 }
