@@ -10,6 +10,14 @@ type User struct {
 	Phone    string `db:"phone"`
 }
 
+func (u *User) ToDomain() *domain.User {
+	return &domain.User{
+		ID:       u.ID,
+		Username: u.Username,
+		Phone:    u.Phone,
+	}
+}
+
 func NewUser(domainObject *domain.User) User {
 	return User{
 		ID:       domainObject.ID,

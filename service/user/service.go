@@ -17,6 +17,11 @@ type UnitOfWork interface {
 
 type TokenService interface {
 	Issue(ctx context.Context, logger *logrus.Entry, userID string) *domain.Token
+	GetToken(
+		ctx context.Context,
+		logger *logrus.Entry,
+		token string,
+	) (*domain.Token, error)
 }
 
 type Repository interface {
@@ -24,6 +29,10 @@ type Repository interface {
 		ctx context.Context,
 		username, phone string,
 	) (string, error)
+	GetByToken(
+		ctx context.Context,
+		token string,
+	) (*domain.User, error)
 }
 
 type Service struct {

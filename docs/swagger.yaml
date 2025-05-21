@@ -55,6 +55,37 @@ paths:
       summary: create user
       tags:
       - user
+  /user/token/{token}:
+    get:
+      description: get user by token
+      parameters:
+      - description: token
+        in: path
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.User'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: get user by token
+      tags:
+      - user
 securityDefinitions:
   ApiKeyAuth:
     in: query

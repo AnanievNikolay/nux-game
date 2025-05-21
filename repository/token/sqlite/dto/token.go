@@ -19,3 +19,11 @@ func NewToken(domainObject *domain.Token) Token {
 		ExpiresAt: domainObject.ExpiresAt,
 	}
 }
+
+func (t *Token) ToDomain() *domain.Token {
+	return &domain.Token{
+		UserID:    t.UserID,
+		Token:     t.Token,
+		ExpiresAt: t.ExpiresAt,
+	}
+}

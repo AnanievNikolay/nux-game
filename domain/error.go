@@ -5,8 +5,9 @@ import (
 )
 
 var (
-	ErrorUserIsNil                      = errors.New("user is nil")
+	ErrorUserNotFound                   = errors.New("user not found")
 	ErrorUsernameWithThisPhoneNotUnique = errors.New(
-		"User with this username and phone already exist",
+		"user with this username and phone already exist",
 	)
+	ErrTokenInvalidOrExpired = errors.New("token invalid or expired")
 )

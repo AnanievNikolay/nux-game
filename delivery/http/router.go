@@ -29,4 +29,6 @@ func (d *Delivery) initRouter() {
 	d.e.GET("/docs/*", echoSwagger.WrapHandler)
 
 	d.e.POST("/user/register", d.userHandler.CreateUser)
+
+	d.e.GET("/user/token/:token", d.userHandler.GetUserByToken)
 }

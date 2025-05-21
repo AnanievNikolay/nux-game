@@ -14,6 +14,11 @@ type Service interface {
 		logger *logrus.Entry,
 		username, phone string,
 	) (*domain.User, error)
+	GetUserByToken(
+		ctx context.Context,
+		logger *logrus.Entry,
+		token string,
+	) (*domain.User, error)
 }
 
 type Handler struct {

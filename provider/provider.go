@@ -102,6 +102,7 @@ func (p *Provider) Provide() (*dig.Container, error) {
 
 	p.provide(tokenRepository.NewRepository, dig.As(
 		new(userUnitOfWork.TokenRepositopry),
+		new(tokenService.Repository),
 	))
 
 	p.provide(http.NewDelivery)
