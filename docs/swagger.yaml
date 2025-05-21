@@ -23,6 +23,37 @@ definitions:
 info:
   contact: {}
 paths:
+  /game/{token}:
+    get:
+      description: get user by token
+      parameters:
+      - description: token
+        in: path
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.User'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: get user by token
+      tags:
+      - user
   /user/register:
     post:
       description: create user by username and phone
@@ -53,37 +84,6 @@ paths:
           schema:
             type: string
       summary: create user
-      tags:
-      - user
-  /user/token/{token}:
-    get:
-      description: get user by token
-      parameters:
-      - description: token
-        in: path
-        name: token
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/domain.User'
-        "400":
-          description: Bad Request
-          schema:
-            type: string
-        "404":
-          description: Not Found
-          schema:
-            type: string
-        "500":
-          description: Internal Server Error
-          schema:
-            type: string
-      summary: get user by token
       tags:
       - user
 securityDefinitions:

@@ -15,25 +15,23 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/user/register": {
-            "post": {
-                "description": "create user by username and phone",
+        "/game/{token}": {
+            "get": {
+                "description": "get user by token",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "user"
                 ],
-                "summary": "create user",
+                "summary": "get user by token",
                 "parameters": [
                     {
-                        "description": "UserCreateRequest",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/dto.UserCreateRequest"
-                        }
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -64,23 +62,25 @@ const docTemplate = `{
                 }
             }
         },
-        "/user/token/{token}": {
-            "get": {
-                "description": "get user by token",
+        "/user/register": {
+            "post": {
+                "description": "create user by username and phone",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "user"
                 ],
-                "summary": "get user by token",
+                "summary": "create user",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "token",
-                        "name": "token",
-                        "in": "path",
-                        "required": true
+                        "description": "UserCreateRequest",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.UserCreateRequest"
+                        }
                     }
                 ],
                 "responses": {

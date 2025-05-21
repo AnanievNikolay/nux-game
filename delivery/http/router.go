@@ -30,5 +30,5 @@ func (d *Delivery) initRouter() {
 
 	d.e.POST("/user/register", d.userHandler.CreateUser)
 
-	d.e.GET("/user/token/:token", d.userHandler.GetUserByToken)
+	d.e.GET("/game/:token", d.userHandler.GetUserByToken)
 }

@@ -21,7 +21,7 @@ import (
 // @Failure 500 {string} string
 // @Failure 400 {string} string
 // @Failure 404 {string} string
-// @Router /user/token/{token} [GET]
+// @Router /game/{token} [GET]
 func (h *Handler) GetUserByToken(c echo.Context) error {
 	ctx, cancel := context.WithCancel(c.Request().Context())
 	defer cancel()
