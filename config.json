@@ -25,5 +25,8 @@
         "token": {
             "ttl": 604800
         }
+    },
+    "game": {
+        "max_game_number": 1000
     }
 }

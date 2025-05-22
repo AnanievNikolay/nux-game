@@ -1,4 +1,4 @@
-package user
+package game
 
 import (
 	"context"
@@ -11,14 +11,14 @@ import (
 	"github.com/AnanievNikolay/nux-game/domain"
 )
 
-func (s *Service) GetUserByToken(
+func (s *Service) GetHistoryByToken(
 	ctx context.Context,
 	logger *logrus.Entry,
 	token string,
-) (*domain.User, error) {
+) ([]domain.Game, error) {
 	logger = logger.WithFields(s.logger.Data).WithField("token", token)
 
-	mf := utils.LogTimeSpent(logger, "GetUserByToken")
+	mf := utils.LogTimeSpent(logger, "GetHistoryByToken")
 	defer mf()
 
 	userToken, err := s.tokenService.GetValidToken(ctx, logger, token)
@@ -26,19 +26,12 @@ func (s *Service) GetUserByToken(
 		if errors.Is(err, domain.ErrTokenInvalidOrExpired) {
 			return nil, err
 		}
-		return nil, fmt.Errorf("tokenService.GetToken: %w", err)
 	}
 
-	user, err := s.repository.GetByID(ctx, userToken.UserID)
+	history, err := s.repository.GetHistoryByToken(ctx, userToken.Token)
 	if err != nil {
-		return nil, fmt.Errorf("repository.GetByID: %w", err)
+		return nil, fmt.Errorf("repository.GetHistoryByToken: %w", err)
 	}
 
-	if user == nil {
-		return nil, domain.ErrorUserNotFound
-	}
-
-	user.Token = userToken.Token
-
-	return user, nil
+	return history, nil
 }

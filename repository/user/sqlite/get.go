@@ -29,28 +29,27 @@ func (r *Repository) GetIDByUsernameAndPhone(
 	return id, nil
 }
 
-func (r *Repository) GetByToken(
+func (r *Repository) GetByID(
 	ctx context.Context,
-	token string,
+	id string,
 ) (*domain.User, error) {
 	q := `SELECT
-				u.id,
-				u.username,
-				u.phone
+				id,
+				username,
+				phone
 			FROM
-				user_token AS ut
-				INNER JOIN users AS u ON u.id = ut.user_id
+				users
 			WHERE
-				ut.token = ?`
+				id = ?`
 
 	var dtoUser dto.User
 
-	if err := r.con.GetDB(ctx).GetContext(ctx, &dtoUser, q, token); err != nil {
+	if err := r.con.GetDB(ctx).GetContext(ctx, &dtoUser, q, id); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, nil
 		}
 
-		return nil, fmt.Errorf("sqlx.QueryRowContext: %w", err)
+		return nil, fmt.Errorf("sqlx.GetContext: %w", err)
 	}
 
 	return dtoUser.ToDomain(), nil

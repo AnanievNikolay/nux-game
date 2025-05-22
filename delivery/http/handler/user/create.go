@@ -78,5 +78,5 @@ func (h *Handler) CreateUser(c echo.Context) error {
 		return c.String(http.StatusInternalServerError, handlerUtils.InternalServerErrorMessage)
 	}
 
-	return c.JSON(http.StatusOK, user)
+	return c.JSON(http.StatusOK, dto.NewUser(user))
 }

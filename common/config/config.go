@@ -9,6 +9,7 @@ type Config struct {
 	Delivery *Delivery          `json:"delivery"`
 	DB       *DB                `json:"db"`
 	Service  *Service           `json:"service"`
+	Game     *Game              `json:"game"`
 }
 
 type Delivery struct {
@@ -37,4 +38,8 @@ type Service struct {
 
 type TokenService struct {
 	TTL int `json:"ttl"`
+}
+
+type Game struct {
+	MaxGameNumber int `json:"max_game_number"`
 }

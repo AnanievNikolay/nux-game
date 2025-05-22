@@ -1,24 +1,23 @@
-package user
+package game
 
 import (
 	"context"
 	"errors"
 	"fmt"
 
-	"github.com/sirupsen/logrus"
-
 	"github.com/AnanievNikolay/nux-game/common/utils"
 	"github.com/AnanievNikolay/nux-game/domain"
+	"github.com/sirupsen/logrus"
 )
 
-func (s *Service) GetUserByToken(
+func (s *Service) Play(
 	ctx context.Context,
 	logger *logrus.Entry,
 	token string,
-) (*domain.User, error) {
+) (*domain.Game, error) {
 	logger = logger.WithFields(s.logger.Data).WithField("token", token)
 
-	mf := utils.LogTimeSpent(logger, "GetUserByToken")
+	mf := utils.LogTimeSpent(logger, "Play")
 	defer mf()
 
 	userToken, err := s.tokenService.GetValidToken(ctx, logger, token)
@@ -26,19 +25,16 @@ func (s *Service) GetUserByToken(
 		if errors.Is(err, domain.ErrTokenInvalidOrExpired) {
 			return nil, err
 		}
-		return nil, fmt.Errorf("tokenService.GetToken: %w", err)
 	}
 
-	user, err := s.repository.GetByID(ctx, userToken.UserID)
+	gameResult := s.getGameResult(userToken.UserID, s.getNumber())
+
+	id, err := s.repository.Save(ctx, gameResult)
 	if err != nil {
-		return nil, fmt.Errorf("repository.GetByID: %w", err)
+		return nil, fmt.Errorf("repository.Save: %w", err)
 	}
 
-	if user == nil {
-		return nil, domain.ErrorUserNotFound
-	}
+	gameResult.ID = id
 
-	user.Token = userToken.Token
-
-	return user, nil
+	return gameResult, nil
 }

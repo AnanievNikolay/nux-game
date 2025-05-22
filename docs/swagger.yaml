@@ -20,6 +20,30 @@ definitions:
     - phone
     - username
     type: object
+  github_com_AnanievNikolay_nux-game_delivery_http_handler_game_dto.Game:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      is_win:
+        type: boolean
+      number:
+        type: integer
+      prize:
+        type: number
+      user_id:
+        type: string
+    type: object
+  github_com_AnanievNikolay_nux-game_repository_token_sqlite_dto.Token:
+    properties:
+      expiresAt:
+        type: string
+      token:
+        type: string
+      userID:
+        type: string
+    type: object
 info:
   contact: {}
 paths:
@@ -54,6 +78,132 @@ paths:
       summary: get user by token
       tags:
       - user
+  /game/{token}/deactivate:
+    post:
+      description: deactivate token
+      parameters:
+      - description: token
+        in: path
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: deactivate token
+      tags:
+      - token
+  /game/{token}/history:
+    get:
+      description: play game
+      parameters:
+      - description: token
+        in: path
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/github_com_AnanievNikolay_nux-game_delivery_http_handler_game_dto.Game'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: play game
+      tags:
+      - game
+  /game/{token}/play:
+    post:
+      description: play game
+      parameters:
+      - description: token
+        in: path
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_AnanievNikolay_nux-game_delivery_http_handler_game_dto.Game'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: play game
+      tags:
+      - game
+  /game/{token}/renew:
+    post:
+      description: update token
+      parameters:
+      - description: token
+        in: path
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_AnanievNikolay_nux-game_repository_token_sqlite_dto.Token'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: update token. Deactivate old and issue new
+      tags:
+      - token
   /user/register:
     post:
       description: create user by username and phone

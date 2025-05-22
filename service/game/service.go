@@ -1,4 +1,4 @@
-package token
+package game
 
 import (
 	"context"
@@ -9,42 +9,47 @@ import (
 )
 
 type Repository interface {
-	GetToken(ctx context.Context, token string) (*domain.Token, error)
-	Deactivate(ctx context.Context, token string) error
+	Save(ctx context.Context, game *domain.Game) (int, error)
+	GetHistoryByToken(ctx context.Context, token string) ([]domain.Game, error)
 }
 
-type UnitOfWork interface {
-	UpdateToken(
+type TokenService interface {
+	GetValidToken(
 		ctx context.Context,
-		oldToken string,
-		newToken *domain.Token,
-	) error
+		logger *logrus.Entry,
+		token string,
+	) (*domain.Token, error)
 }
 
 type Service struct {
 	logger *logrus.Entry
 
-	repository Repository
-	uow        UnitOfWork
+	maxGameNumber int
 
-	ttl int
+	repository Repository
+
+	tokenService TokenService
 }
 
 func NewService(
 	logger *logrus.Entry,
+
 	cfg *config.Config,
+
 	repository Repository,
-	uow UnitOfWork,
+
+	tokenService TokenService,
 ) *Service {
 	return &Service{
 		logger: logger.WithFields(logrus.Fields{
 			"layer":   "service",
-			"service": "token",
+			"service": "game",
 		}),
 
-		repository: repository,
-		uow:        uow,
+		maxGameNumber: cfg.Game.MaxGameNumber,
 
-		ttl: cfg.Service.Token.TTL,
+		repository: repository,
+
+		tokenService: tokenService,
 	}
 }

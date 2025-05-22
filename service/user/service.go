@@ -17,7 +17,7 @@ type UnitOfWork interface {
 
 type TokenService interface {
 	Issue(ctx context.Context, logger *logrus.Entry, userID string) *domain.Token
-	GetToken(
+	GetValidToken(
 		ctx context.Context,
 		logger *logrus.Entry,
 		token string,
@@ -29,9 +29,9 @@ type Repository interface {
 		ctx context.Context,
 		username, phone string,
 	) (string, error)
-	GetByToken(
+	GetByID(
 		ctx context.Context,
-		token string,
+		id string,
 	) (*domain.User, error)
 }
 

@@ -8,6 +8,8 @@ import (
 	"github.com/sirupsen/logrus"
 
 	"github.com/AnanievNikolay/nux-game/common/config"
+	"github.com/AnanievNikolay/nux-game/delivery/http/handler/game"
+	"github.com/AnanievNikolay/nux-game/delivery/http/handler/token"
 	"github.com/AnanievNikolay/nux-game/delivery/http/handler/user"
 )
 
@@ -18,13 +20,17 @@ type Delivery struct {
 
 	addr string
 
-	userHandler *user.Handler
+	userHandler  *user.Handler
+	tokenHandler *token.Handler
+	gameHandler  *game.Handler
 }
 
 func NewDelivery(
 	logger *logrus.Entry,
 
 	userHandler *user.Handler,
+	tokenHandler *token.Handler,
+	gameHandler *game.Handler,
 
 	cfg *config.Config,
 ) *Delivery {
@@ -38,7 +44,9 @@ func NewDelivery(
 
 		addr: fmt.Sprintf("%s:%d", cfg.Delivery.HTTP.Host, cfg.Delivery.HTTP.Port),
 
-		userHandler: userHandler,
+		userHandler:  userHandler,
+		tokenHandler: tokenHandler,
+		gameHandler:  gameHandler,
 	}
 
 	d.e.Logger.SetOutput(io.Discard)

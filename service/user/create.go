@@ -47,5 +47,7 @@ func (s *Service) CreateUser(
 		return nil, fmt.Errorf("unitOfWork.Save: %w", err)
 	}
 
+	user.Token = token.Token
+
 	return user, nil
 }
