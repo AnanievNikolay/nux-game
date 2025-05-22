@@ -43,6 +43,9 @@ Before running the project, make sure to review and adjust the configuration in 
         "token": {
             "ttl": 604800
         }
+    },
+    "game": {
+        "max_game_number": 1000
     }
 }
 ```
